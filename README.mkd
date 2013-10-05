@@ -1,0 +1,14 @@
+# rspec\_growl\_notifier outputter for QuickRun
+
+This is vim-quickrun outputter for notifying rspec result to growl.
+
+Inspired by [rhysd/quickrun-mac_notifier-outputter](https://github.com/rhysd/quickrun-mac_notifier-outputter "rhysd/quickrun-mac_notifier-outputter")
+
+## Requirement
+
+- growlnotify
+- vimproc (optional)
+
+## License
+
+MIT License http://www.opensource.org/licenses/mit-license.php
