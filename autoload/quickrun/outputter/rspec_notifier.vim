@@ -2,16 +2,15 @@
 " License: MIT License http://www.opensource.org/licenses/mit-license.php
 
 " loading guard {{{
-if exists('g:quickrun_rspec_growl_notifier_outputter_loaded') && g:quickrun_rspec_growl_notifier_outputter_loaded
+if exists('g:quickrun_rspec_notifier_outputter_loaded') && g:quickrun_rspec_notifier_outputter_loaded
     finish
 endif
-let g:quickrun_rspec_growl_notifier_outputter_loaded = 1
+let g:quickrun_rspec_notifier_outputter_loaded = 1
 "}}}
 
 " check if executable {{{
-if !executable('growlnotify')
-    echoerr "this outputter needs growlnotify!\nsee below URL\nhttp://growl.info/downloads#generaldownloads"
-    finish
+if executable('growlnotify')
+    let g:has_growlnotify = 1
 endif
 "}}}
 
@@ -20,13 +19,13 @@ set cpo&vim
 
 " variables {{{
 " notification title
-if !has('g:outputter_rspec_growl_notifier_title')
-    let g:outputter_rspec_growl_notifier_title = 'vim-quickrun'
+if !has('g:outputter_rspec_notifier_title')
+    let g:outputter_rspec_notifier_title = 'vim-quickrun'
 endif
 
 " notification icon
-if !has('g:outputter_rspec_growl_notifier_icon')
-    let g:outputter_rspec_growl_notifier_icon = '/Applications/MacVim.app'
+if !has('g:outputter_rspec_notifier_icon')
+    let g:outputter_rspec_notifier_icon = '/Applications/MacVim.app'
 endif
 
 let s:has_vimproc = globpath(&rtp, 'autoload/vimproc.vim') != ''
@@ -51,19 +50,21 @@ function! s:outputter.finish(session)
 
     echom message
 
-    let cmd = 'growlnotify -m "'. message .
-                    \'" --name "' . 'vim-quickrun' .
-                    \'" --appIcon "' . g:outputter_rspec_growl_notifier_icon . '"'
-    if s:has_vimproc
-      call vimproc#system(cmd .
-                    \' "' . g:outputter_rspec_growl_notifier_title . '"')
-    else
-      call system(cmd .
-                    \' "' . g:outputter_rspec_growl_notifier_title . '"')
+    if g:has_growlnotify
+      let cmd = 'growlnotify -m "'. message .
+                      \'" --name "' . 'vim-quickrun' .
+                      \'" --appIcon "' . g:outputter_rspec_notifier_icon . '"'
+      if s:has_vimproc
+        call vimproc#system(cmd .
+                      \' "' . g:outputter_rspec_notifier_title . '"')
+      else
+        call system(cmd .
+                      \' "' . g:outputter_rspec_notifier_title . '"')
+      endif
     endif
 endfunction
 
-function! quickrun#outputter#rspec_growl_notifier#new()
+function! quickrun#outputter#rspec_notifier#new()
     return deepcopy(s:outputter)
 endfunction
 "}}}
