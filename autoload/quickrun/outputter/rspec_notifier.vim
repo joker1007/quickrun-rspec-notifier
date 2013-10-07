@@ -11,6 +11,14 @@ let g:quickrun_rspec_notifier_outputter_loaded = 1
 " check if executable {{{
 if executable('growlnotify')
     let g:has_growlnotify = 1
+else
+    let g:has_growlnotify = 0
+endif
+
+if executable('notify-send')
+    let g:has_notifysend = 1
+else
+    let g:has_notifysend = 0
 endif
 "}}}
 
@@ -25,7 +33,10 @@ endif
 
 " notification icon
 if !has('g:outputter_rspec_notifier_icon')
-    let g:outputter_rspec_notifier_icon = '/Applications/MacVim.app'
+    let g:outputter_rspec_notifier_icon = {
+          \ 'success': expand('<sfile>:p:h') . '/../../../images/success.png',
+          \ 'failure': expand('<sfile>:p:h') . '/../../../images/failure.png',
+          \}
 endif
 
 let s:has_vimproc = globpath(&rtp, 'autoload/vimproc.vim') != ''
@@ -44,8 +55,10 @@ function! s:outputter.finish(session)
 
     if (failed == '0')
       let message = 'Success: ' . examples . ' examples'
+      let icon  = g:outputter_rspec_notifier_icon.success
     else
       let message = 'Failed: ' . examples . ' examples, ' . failed . ' failures'
+      let icon  = g:outputter_rspec_notifier_icon.failure
     endif
 
     echom message
@@ -53,13 +66,24 @@ function! s:outputter.finish(session)
     if g:has_growlnotify
       let cmd = 'growlnotify -m "'. message .
                       \'" --name "' . 'vim-quickrun' .
-                      \'" --appIcon "' . g:outputter_rspec_notifier_icon . '"'
+                      \'" --image "' . icon . '"'
       if s:has_vimproc
         call vimproc#system(cmd .
                       \' "' . g:outputter_rspec_notifier_title . '"')
       else
         call system(cmd .
                       \' "' . g:outputter_rspec_notifier_title . '"')
+      endif
+    endif
+
+    if g:has_notifysend && !g:has_growlnotify
+      let cmd = 'notify-send -u "'. normal .
+                      \'" -i "' . icon .
+                      \'" "' . message . '"'
+      if s:has_vimproc
+        call vimproc#system(cmd)
+      else
+        call system(cmd)
       endif
     endif
 endfunction

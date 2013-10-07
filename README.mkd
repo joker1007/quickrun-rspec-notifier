@@ -12,3 +12,7 @@ Inspired by [rhysd/quickrun-mac_notifier-outputter](https://github.com/rhysd/qui
 ## License
 
 MIT License http://www.opensource.org/licenses/mit-license.php
+
+## Icons
+
+from http://icons.mysitemyway.com/
