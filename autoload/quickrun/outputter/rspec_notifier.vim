@@ -77,9 +77,9 @@ function! s:outputter.finish(session)
     endif
 
     if g:has_notifysend && !g:has_growlnotify
-      let cmd = 'notify-send -u "'. normal .
-                      \'" -i "' . icon .
-                      \'" "' . message . '"'
+      let cmd = 'notify-send -u normal' .
+                      \' -i "' . icon . '"' .
+                      \' "' . message . '"'
       if s:has_vimproc
         call vimproc#system(cmd)
       else
