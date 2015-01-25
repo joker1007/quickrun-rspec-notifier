@@ -6,8 +6,17 @@ Inspired by [rhysd/quickrun-mac_notifier-outputter](https://github.com/rhysd/qui
 
 ## Requirement
 
-- growlnotify
-- vimproc (optional)
+- growlnotify(mac) or notify-send(linux)
+- vimproc
+
+## Usage
+```vim
+let s:rspec_quickrun_config = {
+  \ 'command': 'rspec',
+  \ 'outputter': 'multi:error:rspec_notifier',
+  \ 'outputter/buffer/split': ':botright 8sp',
+  \}
+```
 
 ## License
 
