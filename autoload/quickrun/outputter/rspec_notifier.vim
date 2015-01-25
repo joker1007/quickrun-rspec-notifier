@@ -67,24 +67,15 @@ function! s:outputter.finish(session)
       let cmd = 'growlnotify -m "'. message .
                       \'" --name "' . 'vim-quickrun' .
                       \'" --image "' . icon . '"'
-      if s:has_vimproc
-        call vimproc#system(cmd .
-                      \' "' . g:outputter_rspec_notifier_title . '"')
-      else
-        call system(cmd .
-                      \' "' . g:outputter_rspec_notifier_title . '"')
-      endif
+      call vimproc#system(cmd .
+                    \' "' . g:outputter_rspec_notifier_title . '"')
     endif
 
     if g:has_notifysend && !g:has_growlnotify
       let cmd = 'notify-send -u normal' .
                       \' -i "' . icon . '"' .
                       \' "' . message . '"'
-      if s:has_vimproc
-        call vimproc#system(cmd)
-      else
-        call system(cmd)
-      endif
+      call vimproc#system(cmd)
     endif
 endfunction
 
